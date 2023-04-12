@@ -1,0 +1,64 @@
+/* .scrollbar-thin::-webkit-scrollbar {
+    width: 15px;
+    z-index: 152;
+  }
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color:red;
+    border-radius: 5px;
+} */
+
+/* Set the width of the scrollbar */
+::-webkit-scrollbar {
+    width: 15px;
+  }
+  
+  /* Define the style of the scrollbar thumb */
+  ::-webkit-scrollbar-thumb {
+    /* background-color: #ccc; */
+    border-radius: 15px;
+  }
+  
+  /* Set the width and color of the scrollbar for Firefox and newer versions of Chrome */
+  /* ::-webkit-scrollbar-track {
+    background-color: #f5f5f5;
+  } */
+    
+  ::-webkit-scrollbar-thumb {
+    /* background-color: #ccc; */
+    border-radius: 5px;
+  }
+  
+  /* Set the width and color of the scrollbar for newer versions of Chrome */
+  ::-webkit-scrollbar {
+    width: 25px;
+    height: 4px;
+    /* background-color: #f5f5f5; */
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    /* background-color: #ccc; */
+    border-radius: 5px;
+  }
+  
+  /* Set the width and color of the scrollbar for Firefox */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color:#333333;
+    
+  }
+  
+  /* Set the width and color of the scrollbar for newer versions of Chrome */
+  .scrollbar-thin::-webkit-scrollbar {
+    width:10px;
+    height: 15px;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color:#3C393F;
+  }
+  
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background-color:#333333;
+    opacity: 90;
+  }

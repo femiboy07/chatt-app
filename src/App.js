@@ -1,23 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import React,{useEffect, useState} from 'react';
+import './index.css';
+import Layout from './components/Layout/Layout.component';
+import useUserAuth from './Context/userContext';
+import LoginPage from './Page/LoginPage/LoginPage.page';
+import useOnlineStatus from './Hooks/useOnlineStatus';
+
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const isOnline=useOnlineStatus()
+  const {user}=useUserAuth();
+  // const [users,setUser]=useState(user);
+
+  // useEffect(()=>{
+  //   setUser(user);
+     
+  // },[user])
+  
+return (
+
+    <div className='bg-[#252329] h-[100%]'>
+      {user === null ? <LoginPage/> :<Layout />}
+      {/* {isOnline ? <h1>online</h1>:<h1>offline</h1>} */}
+      
     </div>
   );
 }
