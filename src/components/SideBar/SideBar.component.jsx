@@ -81,8 +81,8 @@ const SideBar=({isOpen,setIsOpen,bar,setBar,handleClick,sideRef,handleClickOutsi
 
    
 return (    
-        <div className={`relative  `}> 
-           <aside className={ `fixed   ${isOpen === true ? `block` : `hidden`}  lg:block col-start-1 col-end-2 row-start-1 row-end-3  left-0 top-0 box-border h-screen  max-[370px]:h-screen bg-opacity-90   max-[370px]:w-fit  md:bg-opacity-[0.98]  z-[51]  w-[324px]   max-h-[full] bg-[#120F13]   `}>
+        // <div className={`relative `}> 
+           <aside className={ ` fixed   ${isOpen === true ? `block` : `hidden`} overflow-auto lg:block col-start-1 col-end-2 row-start-1 row-end-3  left-0 top-0 box-border h-screen  max-[370px]:h-screen bg-opacity-90   max-[370px]:w-fit  md:bg-opacity-[0.98]  z-[90]  w-[324px]   max-h-[full] bg-[#120F13]   `}>
           <Routes>
             <Route path={'/'} element={<Channels/>}/>
             <Route  path={`/channel/:id`} element={
@@ -96,16 +96,16 @@ return (
              <Route  path={`/allChannel`} element={<Channels handleModal={handleModal} handleChangeChannel={handleChangeChannel}/>}/>
 
             </Routes>
-            {/* {bar === true ? (
+             {bar === true ? (
             <LoginBar 
              sideRef={sideRef} 
              handleShow={handleShow}
              bar={bar} 
              handleClickOutsideBar={handleClickOutsideBar} 
             /> 
-            ):null} */}
-         {/* {bar && <div onClick={handleClickOutsideBar}  className="w-[324px] h-screen fixed left-0 top-0  z-50 bg-transparent"></div>}
-            <div className="bg-black flex justify-between fixed p-4 w-[324px] max-[370px]:w-full  bottom-0 mt-5 left-0 rounded-bl-lg">
+            ):null} 
+          {bar && <div onClick={handleClickOutsideBar}  className="w-[324px]  fixed left-0 top-0  z-50 bg-transparent"></div>}
+               <div className="bg-black flex justify-between fixed p-4 w-[324px] max-[370px]:w-full  bottom-0 mt-5 left-0 rounded-bl-lg">
                 <div className="  left-[27.76px]">
                   <img src={myDog} className='w-[45px] h-[42px] rounded-lg'  alt='profile'/>
                 </div>
@@ -115,10 +115,9 @@ return (
                 <Link className="text-black self-center"  onClick={handleClick} ref={sideRef}>
                   <FontAwesomeIcon icon={faArrowDown} color='white'/>
                 </Link>
-                </div> */}
-                
-            </aside> 
-      </div>
+                </div> 
+             </aside> 
+      // </div>
 
     )
 }

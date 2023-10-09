@@ -12,9 +12,9 @@ import { setSelectedRoom } from '../../reduxstore/features/Channels/channelSlice
 import ProfileBar from '../ProfileBar/ProfileBar.component';
 import useOnlineStatus from '../../Hooks/useOnlineStatus';
 import { ToastContainer, toast } from 'react-toastify';
-import useUserAuth from '../../Context/userContext';
+
 import ModalCreate from '../ModalCreate/ModalCreate.component';
-import { teal } from '@mui/material/colors';
+
 
 
 const Layout=({user})=>{
@@ -65,8 +65,9 @@ const Layout=({user})=>{
     
  return (
     
-    <div className='bg-[#252329] grid  lg:grid-cols-[324px_1fr] w-full h-screen relative    grid-rows-[auto_1fr] '>
-      <AppBar isOpen={isOpen} setIsOpen={()=>setIsOpen(!isOpen)} barRef={barRef} handleClickOutside={handleClickOutside}/>
+    <div className='bg-[#252329] w-full lg:w-screen '>
+    <AppBar isOpen={isOpen} setIsOpen={()=>setIsOpen(!isOpen)} barRef={barRef} handleClickOutside={handleClickOutside}/>
+    
     <SideBar  
       handleShow={handleShow}
       handleModal={handleModal} 
@@ -80,7 +81,10 @@ const Layout=({user})=>{
       handleClickOutsideBar={handleClickOutsideBar} 
       handleClick={handleClick} 
     />
-    <main className="bg-[#252329] text-white  mt-[55px] h-[100%] lg:col-start-2   lg:col-end-3  row-start-1   w-full  flex flex-wrap flex-col  ">
+    
+
+    
+    <main className="bg-[#252329] text-white flex flex-wrap flex-col ">
     {display  ? (
     <ProfileBar 
     display={display} 
@@ -94,8 +98,8 @@ const Layout=({user})=>{
      handleClickOutsideText={handleClickOutsideText}
      />
     ):null}
-    <Chat/>
-    <ToastContainer/>
+     <Chat/> 
+    {/* <ToastContainer/> */}
     <div className='fixed bottom-[10px] lg:left-[380px] left-0 lg:right-[78px] right-0'>
     <InputBar/>
     </div> 

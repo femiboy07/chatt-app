@@ -23,7 +23,7 @@ const LoginBar=({sideRef,bar,handleClickOutsideBar,handleShow})=>{
   }
 
     return(
-        <div className="w-[192.04px] bg-[#252329] z-[51] rounded-lg mb-4  left-[112px] right-[19.2px] bottom-[45.75px] h-[173.61px] absolute">
+        <div className="w-[192.04px] bg-[#252329] z-[51] rounded-lg mb-4  left-[112px] right-[19.2px] bottom-[45.75px] h-[173.61px] fixed">
            <div className="flex flex-col  w-[100%]  h-full cursor-pointer ">
               <div onClick={handleShow} className="h-[39.15px] w-[164px] flex items-center mt-[15.05px] pt-2 pb-2  rounded-md ml-[12px]  mr-[19.5px] hover:bg-[#3C393F]">
                 <span className="ml-[13.35px]"><AccountCircleIcon sx={{color:"white"}}/></span>

@@ -25,7 +25,7 @@ const Message=({message,user})=>{
                 } else if(diff < 7 *24 * 60 * 60 * 1000 && aWeekAgo.getMonth() === date.getMonth() ) {
                    return `a week ago at ${date.toLocaleTimeString()}`
                 }else{
-                        return date.toLocaleDateString(); 
+                   return date.toLocaleDateString(); 
                 }
               } 
               
@@ -34,7 +34,7 @@ const Message=({message,user})=>{
          
         return(
     
-        <div className="lg:ml-14 ml-0 mt-5 " >   
+        <div className="lg:ml-14 ml-0 mt-9 lg:w-1 flex  flex-wrap" >   
            <div className="flex">
            <img  alt='person' className="mr-5 ml-[28px] lg:ml-0 w-[42px] h-[42px] rounded-lg"/>
             <div className="flex flex-col w-fit align-baseline ">

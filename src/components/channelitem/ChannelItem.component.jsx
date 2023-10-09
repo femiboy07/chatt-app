@@ -14,19 +14,18 @@ const ChannelItem=({handleChangeChannel})=>{
         return <CircularProgress/>
     }
 
-    // if(error){
-    //     return <div>Error {error.message}</div>
-    // }
+    
     if (!rooms || rooms.length === 0) {
-        return <div className='text-white absolute  right-[25.6px] flex flex-col gap-5 left-[32.99px] top-[168.14px]'>
+        return(
+         <div className='text-white absolute  right-[25.6px] flex flex-col gap-5 left-[32.99px] top-[168.14px]'>
             <div className='flex justify-center'>
             Rooms not yet created
-            </div>
-          
-            </div>;
+        </div>
+        </div>
+        );
     }
     const abbreviation=(str)=>{
-        let words=str.split(' ');
+        let words=str.split(' ').splice(0,2);
         let abbreviated=words.map(word=>word[0]).join('');
         return abbreviated;
       }

@@ -10,19 +10,12 @@ import useOnlineStatus from './Hooks/useOnlineStatus';
 function App() {
   const isOnline=useOnlineStatus()
   const {user}=useUserAuth();
-  // const [users,setUser]=useState(user);
-
-  // useEffect(()=>{
-  //   setUser(user);
-     
-  // },[user])
+ 
   
 return (
 
-    <div className='bg-[#252329] h-[100%]'>
+    <div className='bg-[#252329] h-[100%] w-full'>
       {user === null ? <LoginPage/> :<Layout />}
-      {/* {isOnline ? <h1>online</h1>:<h1>offline</h1>} */}
-      
     </div>
   );
 }

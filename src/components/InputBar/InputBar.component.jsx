@@ -40,7 +40,9 @@ const InputBar=()=>{
     e.preventDefault();
     const data={message:text,userId:user.uid,timestamp:Date.now()}
     console.log(data,'data')
+    if(data.message !== ''){
      dispatch(createMessage({roomId,messageData:data}))
+    }
      setText('');
      
   }

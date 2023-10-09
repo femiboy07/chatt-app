@@ -15,25 +15,7 @@ export const fetchRooms=createAsyncThunk('Rooms/fetchRooms',async()=>{
         if(!rooms || rooms.length === 0){
           return [];
         }
-        // const profilesRef=collection(firestore,'profile');
-        // const profileQuery=query(profilesRef,where('id' ,'in', membersId));
-        
-
-        
-        
-        // const profiles= (await getDocsFromServer(profileQuery)).docs.flatMap((doc)=>{
-        //   const profileData=doc.data();
-        //   const entries=Object.entries(profileData);
-        //   const filterdData=entries.filter(([key,value])=>key !== 'password');
-        //   return[{
-        //     id:doc.id,
-        //     ...Object.fromEntries(filterdData),
-        //     timestamp:profileData.timestamp.toDate().getTime()
-            
-        //   }]
-        // })
-
-      
+       
       
 
         return {rooms}
@@ -57,7 +39,7 @@ export const fetchRoomProfiles = createAsyncThunk(
     const profileQuery = query(profilesRef, where('id', 'in', memberIds));
 
     const profiles = (
-      await getDocsFromCache(profileQuery)
+      await getDocs(profileQuery)
     ).docs.flatMap((doc) => {
       const profileData = doc.data();
       const entries = Object.entries(profileData);
@@ -79,7 +61,7 @@ const savedSelectedRoom = localStorage.getItem('selectedRoom') ;
 
 const Channels=createSlice({
   name:'Channels',
-  initialState:{rooms:[],profiles:[],error:null,loading:false,selectedRoom:savedSelectedRoom ? JSON.parse(savedSelectedRoom):{id:null,name:'',description:""}},
+  initialState:{rooms:[],profiles:[],error:null,loading:false,selectedRoom:savedSelectedRoom !== null ? JSON.parse(savedSelectedRoom):{id:'welcome'}},
   reducers:{
     setSelectedRoom:(state,action)=>{
       state.selectedRoom=action.payload;

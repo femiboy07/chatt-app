@@ -4,21 +4,26 @@ import { faLessThan } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import myDog from '../../svg/portrait-pomeranian-dog.jpg';
 import {useDispatch,useSelector} from 'react-redux';
-import { clearSelectedRoom, fetchRooms } from "../../reduxstore/features/Channels/channelSlice";
+import { clearSelectedRoom, fetchRooms ,fetchRoomProfiles} from "../../reduxstore/features/Channels/channelSlice";
 import { CircularProgress } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import LoginPage from "../../Page/LoginPage/LoginPage.page";
-import useUserAuth from "../../Context/userContext";
-import useOnlineStatus from "../../Hooks/useOnlineStatus";
+
 
 
 const Channel=({bar,sideRef,handleClickOutsideBar,handleClick})=>{
     const {loading,error,profiles,selectedRoom}=useSelector((state)=>state.rooms);
+    const dispatch=useDispatch()
    
    console.log(profiles)
+   const roomId=selectedRoom?.id;
+   useEffect(()=>{
+    if(roomId){
+      
+      dispatch(fetchRoomProfiles(roomId));
+    }  
+   },[roomId,dispatch])
 
 
-   
+    
 
     if(loading){
         return (
@@ -39,7 +44,7 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick})=>{
       }
     return(
       
-        <>
+        <div className="overflow-auto">
         
         <div className="h-[3.53rem] w-[324px]   top-96 bottom-3/4 flex items-center">
            <Link to='/allChannel' className="mr-5 ml-4 w-[10.74px] h-[18.77px] flex self-center" > 
@@ -53,7 +58,7 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick})=>{
             
             </div>
             
-        <div className="mt-10 mr-4 ml-6 h-screen   ">
+        <div className="mt-10 mr-4 ml-6   ">
           <h1 className="text-[#828282] text-[18px] font-[Noto-Sans] ">MEMBERS</h1>
           <>
           {profiles && profiles.map((user)=>{
@@ -74,7 +79,7 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick})=>{
           </>
         </div>
       
-        </>
+        </div>
 
       
         

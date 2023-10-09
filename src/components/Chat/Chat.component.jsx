@@ -27,7 +27,7 @@ const Chat=()=>{
     setMessages([])
     }
   }, [roomId,dispatch]);
-  useEffect(() => {
+    useEffect(() => {
     
 
     const messageRef = collection(firestore, `Rooms/${roomId}/Messages`);
@@ -85,7 +85,7 @@ const Chat=()=>{
 
   
     return(
-        <div className="mb-[45px]  lg:w-full pr-[55px] h-fit ">
+        <div className="mb-[95px] mt-[25px] lg:w-full pr-[55px] h-screen ">
         {messages && messages.map((message,index)=>{
         const user = profiles.find(profile => profile.id === message.userId);
         return(
