@@ -22,7 +22,7 @@ const LoginPage=()=>{
     const handleLogin=async(e)=>{
      e.preventDefault();
      signIn(email,password).then((user)=>{
-     navigate('/channel/welcome')
+     navigate('/channel/welcome');
     
        console.log(user);
     }).catch((err)=>{

@@ -28,7 +28,7 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick,handleShowModalPro
       dispatch(clearProfile())
       
       const fetchData = async () => {
-        if(roomId || user.uid ){
+        if(roomId || user ){
         const {unsubscribe,membersListener} = await fetchRoom(roomId,dispatch);
        
         // Cleanup function

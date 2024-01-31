@@ -18,7 +18,7 @@ export const fetchRooms = createAsyncThunk('Rooms/fetchRooms', async (searchTerm
   const filteredRooms = searchTerm
     ? rooms.filter((room) => room.name.toLowerCase().includes(searchTerm.toLowerCase()))
     : rooms;
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    await new Promise((resolve) => setTimeout(resolve, 5000));
 
   return { rooms: filteredRooms };
 });
