@@ -1,28 +1,33 @@
-/* .scrollbar-thin::-webkit-scrollbar {
-    width: 15px;
+.scrollbar-thin::-webkit-scrollbar {
+    width: 1px;
     z-index: 152;
+    background-color: #333333;
   }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
     background-color:red;
     border-radius: 5px;
-} */
+}
 
 /* Set the width of the scrollbar */
 ::-webkit-scrollbar {
-    width: 15px;
+    width: 1px;
+    height: 100%;
+    background-color: transparent;
   }
   
   /* Define the style of the scrollbar thumb */
   ::-webkit-scrollbar-thumb {
     /* background-color: #ccc; */
-    border-radius: 15px;
+    border-radius: 50%;
+    
   }
   
   /* Set the width and color of the scrollbar for Firefox and newer versions of Chrome */
-  /* ::-webkit-scrollbar-track {
+  ::-webkit-scrollbar-track {
     background-color: #f5f5f5;
-  } */
+    height:1rem;
+  }
     
   ::-webkit-scrollbar-thumb {
     /* background-color: #ccc; */
@@ -31,34 +36,69 @@
   
   /* Set the width and color of the scrollbar for newer versions of Chrome */
   ::-webkit-scrollbar {
-    width: 25px;
-    height: 4px;
+    width:10px;
+    height: 2px;
+    background-color: transparent;
     /* background-color: #f5f5f5; */
   }
   
   ::-webkit-scrollbar-thumb {
     /* background-color: #ccc; */
-    border-radius: 5px;
+    border-radius: 2px;
+    height:-5px;
   }
   
   /* Set the width and color of the scrollbar for Firefox */
   .scrollbar-thin {
     scrollbar-width: thin;
+    scroll-margin-block: 50px;
+    scroll-margin: 550px;
+    
+    /* scrollbar-gutter: both-edges; */
+    /* scroll-padding-top: 55px; */
     scrollbar-color:#333333;
+    /* scroll-snap-align: end; */
+    
+  }
+
+  .scrollbar-thin:hover{
     
   }
   
   /* Set the width and color of the scrollbar for newer versions of Chrome */
   .scrollbar-thin::-webkit-scrollbar {
-    width:10px;
-    height: 15px;
+    width:2px;
+    /* height: -5px; */
+   /* max-height: 50%;
+   min-height: -21px; */
+    overflow-y: scroll;
+    
+    /* overflow-x: hidden; */
+    
+    /* overflow-y:scroll; */
+    /* height: 20vh; */
+    
+    
   }
   
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color:#3C393F;
+    background-color:white;
+    
+    
+    /* max-height:484px; */
+    
+    height: 1px;
+    
+  
+    
   }
   
   .scrollbar-thin::-webkit-scrollbar-track {
     background-color:#333333;
-    opacity: 90;
+    
+    /* opacity: 90; */
+  }
+
+  .scrollbar-thin::-webkit-scrollbar:hover {
+   width: 5px;
   }

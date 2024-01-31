@@ -7,7 +7,7 @@ const useInnerWidthState=()=>{
 
     useEffect(()=>{
         const handleResize=()=>{
-           setWidth(width);
+           setWidth(window.innerWidth);
         }
 
         window.addEventListener('resize',handleResize);
@@ -15,7 +15,7 @@ const useInnerWidthState=()=>{
         return ()=>{
             window.removeEventListener('resize',handleResize)
         }
-    },[width])
+    },[])
     return [width,setWidth]
 }
 

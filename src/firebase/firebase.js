@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
 import  {enableIndexedDbPersistence, enableMultiTabIndexedDbPersistence, getFirestore, initializeFirestore} from "firebase/firestore";
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth'
+import {getAuth, indexedDBLocalPersistence, signInWithEmailAndPassword} from 'firebase/auth'
 
 
 
@@ -17,7 +17,9 @@ const firebaseConfig = {
 
   const app=initializeApp(firebaseConfig);
   const auth=getAuth(app);
-  const firestore=getFirestore(app);
+  // eslint-disable-next-line no-undef
+  const firestore=getFirestore(app)
+  
   enableIndexedDbPersistence(firestore).catch((err)=>{
      if(err.code === 'failed-preondition'){
       console.log('failed-condition')

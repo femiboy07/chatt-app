@@ -1,20 +1,25 @@
-import React ,{useState} from 'react';
+import React ,{useEffect, useState} from 'react';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import useUserAuth from '../../Context/userContext';
 import { firestore } from '../../firebase/firebase';
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, where } from 'firebase/firestore';
 import { Alert, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { auth } from '../../firebase/firebase';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRooms, setProfiles, setSelectedRoom } from '../../reduxstore/features/Channels/channelSlice';
+import fetchRoom from '../../components/apiContext/fetchRoom.component';
 
 
 
 const RegisterPage=()=>{
   const initialFormValues = { email: '', password: '', FirstName: '', LastName: '' };
+  const dispatch=useDispatch()
     const [values,setValues]=useState(initialFormValues);
     const navigate=useNavigate();
     const {signUp,loading,error,setError,setLoading,addUserToWelcomeChannel,signIn}=useUserAuth();
+    
     const handleChange=(e)=>{
         setValues({...values,[e.target.name]:e.target.value})
     }
@@ -28,10 +33,16 @@ const RegisterPage=()=>{
         return true;
      }
 
-   
 
-     const handleSignUp=async(e)=>{
+
+
+    
+
+     
+
+ const handleSignUp=async(e)=>{
     e.preventDefault();
+  
     try{
      setLoading(true);
      await signUp(email,password);
@@ -48,31 +59,37 @@ const RegisterPage=()=>{
                 password:password,
                 userId:user.uid
         })
-      addUserToWelcomeChannel(user.uid,values);
-      setValues(initialFormValues)
+        await addUserToWelcomeChannel(user.uid,values)
+       
+        setValues(initialFormValues);
+        setLoading(false);
+        setError(false);
         
-        setTimeout(()=>{
-            setLoading(false)
-            navigate('/')
-        },5000)
-    }catch(err){
-         console.log(err)
-         setError(!error);
+        
+        navigate('/channel/welcome');
+             
+      
+      
+      }catch(err){
+         console.log(err);
+         setLoading(false)
+         setError(!error)
     }finally{
       setLoading(false);
     }
 }
+
+
     return(
         <div className='h-screen w-screen '>
         <>
+        
            <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8" >
-         <div className="w-full max-w-md space-y-8" >
-         {error === true ? <Alert severity='warning'>This is a warning</Alert>:null}
-         {loading ? 
-         <div className='flex justify-center w-full'>
-         <CircularProgress/>
-         <span className='text-indigo-300'>Redirecting please wait....</span>
-         </div>:(
+            
+         <div className=" w-full  max-w-md space-y-8 h-full" >
+         {error ? <Alert severity='warning' variant='filled'>you are already registered</Alert>:null}
+         {loading ? <span className='text-indigo-300 flex justify-center w-full h-full'>Redirecting please wait....</span>
+         :(
          <form className="mt-8 space-y-6 " action="#" >
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="-space-y-px rounded-md shadow-sm ">

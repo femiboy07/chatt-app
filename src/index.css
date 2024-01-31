@@ -1,6 +1,29 @@
-*{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Custom font imports */
+
+
+@layer base{
+    html{
+        font-family: 'Courier New', Courier, monospace;
+    }
+}
+
+
+
+*::after,::before{
     box-sizing: border-box;
     padding:0;
-    margin:0
+    margin:0;
+    border:0;
 
+}
+
+body{
+    height: 100%;
+     margin: 0;
+    line-height: inherit;
 }

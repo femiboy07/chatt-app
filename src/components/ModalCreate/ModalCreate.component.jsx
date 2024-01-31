@@ -1,54 +1,99 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { Form } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { firestore } from "../../firebase/firebase";
 import useUserAuth from "../../Context/userContext";
 import { createRoom} from "../../reduxstore/features/Channels/channelSlice";
+import { CircularProgress } from "@mui/material";
+import useOnlineStatus from "../../Hooks/useOnlineStatus";
+import {toast} from 'react-toastify';
 
 
 
 const ModalCreate=({modal,handleClickOutsideText,textRef,setModal})=>{
     const [value,setValue]=useState({channelName:'',description:''})
+    const [isloading ,setIsLoading]=useState(false);
+    const [iserror,setError]=useState(false);
+    const isOnline=useOnlineStatus()
     const dispatch=useDispatch();
     const {user}=useUserAuth();
+    const channelRef=useRef(null)
+    const descRef=useRef(null);
     const handleChange=(e)=>{
+        e.target.value.trim().replace(/%20/g, '')
         setValue({...value,[e.target.name]:e.target.value})
-        console.log(value)
+        setError(false)
+
     }
 
     const handleCreate=async(e)=>{
         e.preventDefault();
-        if (user != null){
+       
+
+      if(!channelRef.current.checkValidity() || !descRef.current.checkValidity()){
+        setError(true);
+        e.preventDefault();
+        return;
+      }
+
+      if(!isOnline){
+        
+          toast.dark(
+           <div>
+           You can create room when offline
+           <div className="mt-3">
+           <button onClick={() => toast.dismiss()} className="pl-8 pr-8 bg-white ml-2 text-black rounded-md" >Cancel</button>
+           </div>
+           </div>,
+           {
+           onClose: (reason) => {
+             if (reason === 'manual') {
+               // Toast was closed by clicking Yes or No button
+               toast.dismiss();
+             }
+           },
+           autoClose: 1000,
+         }
+         )
+    
+      }
+        
+        if (user !== null && isOnline){
           const data={
-            name:value.channelName,
+            name:value.channelName.trim(),
             description:value.description,
             members:[user.uid],
             id:value.channelName
           }
+          setError(false)
           dispatch(createRoom(data));
+          setIsLoading(true);
           
-          await setDoc(doc(firestore,'Rooms',data.name),data,);
+          await setDoc(doc(firestore,'Rooms',data.name),data);
+          setIsLoading(false);
           setModal(false);
           setValue({ channelName: '', description: '' });
         }
       }
     return (
  <>
-   {modal && <div onClick={handleClickOutsideText}  className="fixed top-0 left-0 right-0 bottom-0  opacity-50  z-[112]    w-screen h-screen  bg-[#120F13]"></div>}
-   <div ref={textRef} className={`fixed ${modal ? 'block' :'hidden'}  z-[555] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 `} >
-   <div className="flex flex-col   md:h-[359.38px] md:w-[500px]  w-[350px]  bg-[#120F13] rounded-lg  ">
-    <div className="flex flex-col p-6   rounded-lg">
-    <h1 color='white'>NEW CHANNEL</h1>
-    <Form className="mb-4 mt-4">
-     <div className="bg-[#3C393F]  w-[450px] relative h-[40px] border-none">
-     <input name="channelName" type="text" placeholder="Channel Name" value={value.channelName} onChange={handleChange} className="absolute h-[100%] bg-[#3C393F] pl-5 focus:outline-none text-[white] w-[100%] border-none"/>
+   {modal && <div onClick={handleClickOutsideText}  className="fixed top-0 left-0 right-0 bottom-0  opacity-50  z-[112]    w-full h-full  bg-[#120F13]"></div>}
+   <div ref={textRef} className={`fixed ${modal ? 'flex' :'hidden'}   z-[254] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 `} >
+  
+   <div className="  h-fit    pb-8  flex flex-col justify-center  bg-[#120F13] w-screen max-w-[450px] rounded-lg  ">
+    <div className=" p-6 flex flex-col  rounded-lg">
+    <h1 color='white' className="">NEW CHANNEL</h1>
+    <Form className="mb-4 mt-4 " noValidate>
+     <div className="bg-[#3C393F] rounded-lg  w-full relative h-[40px] ">
+     <input name="channelName"  ref={channelRef} type="text" placeholder="Channel Name" required value={value.channelName} onChange={handleChange} className="absolute placeholder:font-[Poppins]  h-[100%] bg-[#3C393F]  appearance-none pl-5 focus:outline-none rounded-lg text-[white] w-[100%] border-none"/>
      </div>
-     <div className="mt-5  w-[450px] relative h-[115.55px] border-none">
-    <textarea type="text" name="description" placeholder="Description" value={value.description} onChange={handleChange} className="absolute focus:outline-none bg-[#3C393F] text-[white]   h-[100%] resize-none  pl-5 pt-4 text-[black] w-[100%] border-none" />
+     {iserror ? <span className=" w-full text-red-400 text-sm">Channel Name & Description needed</span>:null}
+     <div className="mt-5  w-full relative rounded-xl h-[115.55px] border-none">
+    <textarea type="text" ref={descRef} name="description" placeholder="Description" required value={value.description} onChange={handleChange} className="absolute placeholder:font-[Poppins] focus:outline-none bg-[#3C393F] text-white break-words break-all   h-[100%] resize-none rounded-lg  pl-5 pr-3 pt-4  w-[100%] border-none" />
      </div>
-     <div className="absolute right-[25px] flex flex-col justify-center rounded-lg items-center border mt-5 p-5 w-[99.09px] h-[39.34px] bg-[#2F80ED]">
-     <button onClick={handleCreate}>Save</button>
+     <div className=" absolute right-5 justify-center   border mt-5 p-2 pl-5 pr-5   bg-[#120F13]">
+     <button className="text-center w-full" onClick={handleCreate}>{isloading ? <CircularProgress size={15} color="inherit"/>:'save'}</button>
      </div>
     </Form>
     </div>

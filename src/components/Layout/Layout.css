@@ -1,3 +1,13 @@
 /* .width{
     width:calc(100% - 20%);
 } */
+
+
+.EmojiPickerReact{
+    transition: opacity;
+    background-color: blueviolet;
+}
+
+.changeWidth{
+    width:calc(100% - 327px)
+}

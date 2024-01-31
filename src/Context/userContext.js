@@ -1,11 +1,13 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword,signOut } from "firebase/auth";
-import { arrayUnion, collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDoc, getDocs, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import React,{useContext,useEffect,useState} from "react";
 import { createContext } from "react";
 import { auth, firestore } from "../firebase/firebase";
 import bycrypt from 'bcryptjs';
 import {v4 as uuidv4} from 'uuid';
 import { useNavigate } from "react-router";
+import fetchRoom from "../components/apiContext/fetchRoom.component";
+import { useDispatch, useSelector } from "react-redux";
 
 
 
@@ -21,7 +23,9 @@ export const AuthContextProvider=({children})=>{
     const [user,setUser]=useState(null);
     const [error,setError]=useState(false);
     const [loading,setLoading]=useState(false);
-  
+    const dispatch=useDispatch()
+    const [selectedFile,setSelectedFile]=useState(null);
+    const [download, setDownloadUrl] = useState('');
 
     const addUserToWelcomeChannel=async(userId,values)=>{
       const id=uuidv4();
@@ -40,7 +44,7 @@ export const AuthContextProvider=({children})=>{
             members:[userId,'chatbot'],
             id:roomRef.id
         })
-        console.log(roomRef)
+      
         const messageRef=doc(firestore,`${roomRef.path}/Messages/message1`);
    
       await setDoc(messageRef,{
@@ -49,8 +53,11 @@ export const AuthContextProvider=({children})=>{
           timestamp:Date.now(),
           roomId:roomRef.id
         })
+
+       
+        
         const {password,email,FirstName,LastName}=values;
-        console.log('values',values)
+      
         const hashedPassword=await hasPassword(password);
         await setDoc(doc(firestore,'profile',userId),{
              email:email,
@@ -64,7 +71,7 @@ export const AuthContextProvider=({children})=>{
         }else{
 
           const {password,email,FirstName,LastName}=values;
-          console.log('values',values)
+          
           const hashedPassword=await hasPassword(password);
           await setDoc(doc(firestore,'profile',userId),{
                email:email,
@@ -101,20 +108,24 @@ export const AuthContextProvider=({children})=>{
 
 
 useEffect(()=>{
-  const unsubscribe=onAuthStateChanged(auth,(user)=>{
+  const unsubscribe=onAuthStateChanged(auth,async(user)=>{
         if(user){
             console.log('authchange',user);
             setUser(user);
-         }
-         
+            
+        }
     
     })
-    return ()=>unsubscribe();
-},[])
+    return ()=>{
+      if(unsubscribe){
+      unsubscribe()
+      }
+    };
+},[user])
 
 
     return (
-    <userAuthContext.Provider value={{user,setUser,signIn,signUp,error,setError,loading,setLoading,userSignOut,addUserToWelcomeChannel}}>
+    <userAuthContext.Provider value={{user,selectedFile,download,setDownloadUrl,setSelectedFile,setUser,signIn,signUp,error,setError,loading,setLoading,userSignOut,addUserToWelcomeChannel}}>
       {children}
     </userAuthContext.Provider>
     )

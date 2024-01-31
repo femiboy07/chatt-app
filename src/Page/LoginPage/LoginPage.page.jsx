@@ -9,27 +9,26 @@ import { Link, Navigate,useNavigate } from "react-router-dom";
 
 
 const LoginPage=()=>{
-    const {signIn,error,loading,}=useUserAuth();
+    const {signIn}=useUserAuth();
     const navigate=useNavigate();
     const [values,setValues]=useState({email:'',password:''})
     const handleChange=(e)=>{
         setValues({...values,[e.target.name]:e.target.value})
     }
      const {email,password}=values;
-     console.log(email,password)
+  
 
 
     const handleLogin=async(e)=>{
      e.preventDefault();
      signIn(email,password).then((user)=>{
-        setTimeout(()=>{
-             navigate(`/channel/welcome`)
-        },5000)
+     navigate('/channel/welcome')
+    
        console.log(user);
     }).catch((err)=>{
        console.log(err);
     })
-     }
+    }
 
 
     
@@ -37,20 +36,15 @@ const LoginPage=()=>{
 
     return(
         <div className="h-screen w-screen bg-[#252329] ">
-            <>
-    <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <>
+        <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md space-y-8">
           <div>
             <h2 className="mx-auto h-12 w-auto text-center text-white font-serif text-[25px]">The Room</h2>
             <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-white">
               Sign in to your account
             </h2>
-            <p className="mt-2 text-center text-sm text-gray-600">
-              Or{' '}
-              <a  className="font-medium text-indigo-600 hover:text-indigo-500">
-                start your 14-day free trial
-              </a>
-            </p>
+           
           </div>
           <form className="mt-8 space-y-6 " action="#" >
             <input type="hidden" name="remember" defaultValue="true" />
@@ -89,23 +83,12 @@ const LoginPage=()=>{
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm  text-white">
-                  Remember me
-                </label>
-              </div>
+            <div className="flex items-center justify-center">
+              
+              
 
               <div className="text-sm">
-                <a  className="font-medium text-indigo-600 hover:text-indigo-500 mr-4">
-                  Forgot your password?
-                </a>
+               
                 <Link to='/register' className="text-white">
                   register with us
                 </Link>
