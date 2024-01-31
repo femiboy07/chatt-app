@@ -1,6 +1,6 @@
 import {initializeApp} from "firebase/app";
-import  {enableIndexedDbPersistence, enableMultiTabIndexedDbPersistence, getFirestore, initializeFirestore} from "firebase/firestore";
-import {getAuth, indexedDBLocalPersistence, signInWithEmailAndPassword} from 'firebase/auth'
+import  {enableIndexedDbPersistence, getFirestore} from "firebase/firestore";
+import {getAuth} from 'firebase/auth'
 
 
 

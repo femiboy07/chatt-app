@@ -2,6 +2,7 @@
   "name": "chattapp",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://chatt-app-1c551.web.app/",
   "dependencies": {
     "@emoji-mart/data": "^1.1.2",
     "@emoji-mart/react": "^1.1.1",
