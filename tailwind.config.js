@@ -5,6 +5,11 @@ module.exports = {
     fontFamily:{
       Poppins:['Poppins']
     },
+    backgroundImage:{
+      'header-image': 'url("/src/svg/jason-leung-mZNRsYE9Qi4-unsplash.jpg")',
+      'intro-page':'url("/src/svg/codioful-formerly-gradienta-bKESVqfxass-unsplash.jpg")',
+      'register-page':'url("/src/svg/localhost_3000_channel_ANIMEEMANGA (3).png")'
+    },
     extend: {
       keyframes:{
         wiggle:{

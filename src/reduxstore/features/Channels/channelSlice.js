@@ -8,7 +8,7 @@ import { firestore } from '../../../firebase/firebase'
 export const fetchRooms = createAsyncThunk('Rooms/fetchRooms', async (searchTerm) => {
   const roomRef = await getDocs(collection(firestore, 'Rooms'));
   const rooms = roomRef.docs.flatMap((doc) => [{ id: doc.id, ...doc.data() }]);
-  const membersId = rooms.flatMap((room) => room.members);
+  
 
   if (!rooms || rooms.length === 0) {
     return [];
@@ -18,7 +18,7 @@ export const fetchRooms = createAsyncThunk('Rooms/fetchRooms', async (searchTerm
   const filteredRooms = searchTerm
     ? rooms.filter((room) => room.name.toLowerCase().includes(searchTerm.toLowerCase()))
     : rooms;
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
   return { rooms: filteredRooms };
 });
@@ -46,8 +46,6 @@ const Channels=createSlice({
   reducers:{
     setSelectedRoom:(state,action)=>{
       state.selectedRoom=action.payload;
-
-      
       localStorage.setItem('selectedRoom',JSON.stringify(action.payload))
       
     },

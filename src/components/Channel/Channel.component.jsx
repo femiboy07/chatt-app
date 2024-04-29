@@ -26,9 +26,9 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick,handleShowModalPro
 
  useEffect(() => {
       dispatch(clearProfile())
-      
+    
       const fetchData = async () => {
-        if(roomId || user ){
+        if(roomId || user.uid ){
         const {unsubscribe,membersListener} = await fetchRoom(roomId,dispatch);
        
         // Cleanup function
@@ -40,11 +40,11 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick,handleShowModalPro
       }
      };
     
-      if(roomId){
-      fetchData();
+      if(roomId || user.uid){
+        fetchData();
       }
   
-    }, [dispatch, roomId,isOnline,user]);
+    }, [dispatch, roomId,isOnline,user.uid]);
 
    
     console.log(profiles)

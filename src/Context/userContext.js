@@ -8,6 +8,7 @@ import {v4 as uuidv4} from 'uuid';
 import { useNavigate } from "react-router";
 import fetchRoom from "../components/apiContext/fetchRoom.component";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 
 
@@ -111,14 +112,18 @@ useEffect(()=>{
   const unsubscribe=onAuthStateChanged(auth,async(user)=>{
         if(user){
             console.log('authchange',user);
+            // toast.success("redirecting to homepage")
+            setTimeout(()=>{
+
             setUser(user);
-            
+            },200)
         }
     
     })
     return ()=>{
       if(unsubscribe){
-      unsubscribe()
+        
+        unsubscribe()
       }
     };
 },[user])

@@ -1,4 +1,4 @@
-import React,{ useState} from "react";
+import React,{ useEffect, useState} from "react";
 import { Form } from "react-router-dom";
 import { Icon } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,12 +12,14 @@ import { AccountCircleRounded, ModeEditOutlineSharp } from "@mui/icons-material"
 import { useGetCurrentProfile } from "../../Hooks/useUploadImage/useGetCurrentProfile";
 import useOnlineStatus from "../../Hooks/useOnlineStatus";
 import { deleteObject, getStorage, ref } from "firebase/storage";
+import LargeImage from "../LargeImage/LargeImage.component";
 
 
 const ProfileBar=({display,handleRemove})=>{
   const initialValues={email:'',lastname:'',firstname:''}
     const [value, setValue] = useState(initialValues);
     const [editable,setEditable]=useState(false);
+    const [showImage,setShowImage]=useState(false);
     const [userProfile,setUserProfile]=useGetCurrentProfile(auth.currentUser)
     const {user,selectedFile,setSelectedFile}=useUserAuth();
     const [showModalBox,setShowModalBox]=useState(false);
@@ -29,22 +31,20 @@ const ProfileBar=({display,handleRemove})=>{
  
 
   
-   const handleShowModalBox=()=>setShowModalBox(true);
+   const handleShowModalBox=()=>setShowModalBox((prev)=>!prev);
     
     
 
     function handleInputChange(e) {
-      
-
-        setValue({...value,[e.target.name]:e.target.value})
+      setValue({...value,[e.target.name]:e.target.value})
     } 
    
     function handleEditClick() {
-    setEditable(true); // Set editable status to true when edit button is clicked
+         setEditable(true); // Set editable status to true when edit button is clicked
     }
 
     function handleSaveClick() {
-    setEditable(false); // Set editable status to false when save button is clicked
+        setEditable(false); // Set editable status to false when save button is clicked
     }
 
   
@@ -61,32 +61,25 @@ const ProfileBar=({display,handleRemove})=>{
         setSelectedFile(null)
       }
      
-     
-   }
-
-  
+    }
 
 
-   
+    function handleShowLargeImage(){
+          setShowImage(true);   
+    }
 
-
-
-   
-
- 
-
-  function handleShowModalImage() {
+   function handleShowModalImage() {
     return (
-      <div className="fixed right-5 z-50 top-0">
-        <div className="w-full bg-white h-full  z-50 rounded-lg">
-          <ul className="flex text-black w-full flex-col p-5 justify-center list-none">
-            <li className="w-full">
-              <button type="button"  onClick={handleRemoveImage} className="w-full h-full hover:bg-blue hover:opacity-25">
+      <div className="fixed right-24 z-50 top-5">
+        <div className="w-15 bg-white h-15  z-50 rounded-md">
+          <ul className="flex text-black w-full h-full items-center flex-col  justify-center list-none">
+            <li className="w-full h-full p-2  hover:bg-blue-200">
+              <button type="button"  onClick={handleRemoveImage} className="w-full font-Poppins h-full hover:bg-blue hover:opacity-25">
                 Remove image
               </button>
             </li>
-            <li>
-              <label htmlFor="file-input" className="w-full h-full relative cursor-pointer hover:bg-blue hover:opacity-25 ">
+            <li className="w-full h-full p-2  hover:bg-blue-200">
+              <label htmlFor="file-input" className="w-full h-full font-Poppins relative cursor-pointer hover:bg-blue hover:opacity-25 ">
                 Change image
                 <input
                   type="file"
@@ -97,17 +90,18 @@ const ProfileBar=({display,handleRemove})=>{
                 />
               </label>
             </li>
+            <li className="w-full h-full p-2  hover:bg-blue-200 ">
+              <button type="button" onClick={handleShowLargeImage} className="w-full h-full font-Poppins hover:bg-blue " >
+                 View image
+              </button>
+            </li>
           </ul>
         </div>
       </div>
     );
   }
  
-
-
- 
-
-const handleRemoveImage=async(e)=>{
+ const handleRemoveImage=async(e)=>{
   e.preventDefault();
   
   const storage=getStorage()
@@ -115,34 +109,32 @@ const handleRemoveImage=async(e)=>{
     await deleteObject(desertRef);
     const profileRef=doc(firestore,"profile",user.uid);
  
-  await updateDoc(profileRef,{
+   await updateDoc(profileRef,{
   ImageUrl:null,
   })
    setUserProfile({
     ...userProfile,
     ImageUrl:null,
   });
-
    setSelectedFile(null)
+  }
 
-}
-
- 
 
   
     
 
     return(
    <div className={`relative ${display ? 'block':'hidden'}  animate-slideUp `}>
-      <div className="fixed top-0 left-0 right-0 bottom-0 z-[115] opacity-50   w-screen h-screen  bg-[#120F13]"></div>
-      <div className="fixed top-1/2  left-1/2 w-full  -translate-x-1/2 -translate-y-1/2   rounded-lg  scroll-m-0 scrollbar-thin   overflow-y-auto md:w-[650px] h-[550px] z-[116] bg-[#120F13]  ">
-      <div className="flex justify-center  items-center  mt-7  ">
+    
+      <div className="fixed top-0 left-0 right-0 bottom-0 z-[115] opacity-50    w-full h-screen  bg-[#120F13]"></div>
+      <div className="fixed top-1/2  left-1/2 w-full  -translate-x-1/2 -translate-y-1/2   rounded-lg   scrollbar-thin   sm:overflow-y-auto sm:w-[650px] h-screen sm:h-[550px] z-[116] bg-[#120F13]  ">
+      <div className="flex justify-center   items-center  mt-7  ">
       {showModalBox && handleShowModalImage()}
-      <div className="relative w-[150px]  rounded-full  h-[150px]">
-       <div className="absolute w-full h-full left-1/2  rounded-full top-2 -translate-x-1/2 ">
+      <div className="relative w-[150px]  rounded-full   h-[150px]">
+       <div className="absolute w-full h-full left-1/2 rounded-full  -translate-x-1/2 ">
       
         {userProfile && userProfile?.ImageUrl === null   ? 
-          <span><AccountCircleRounded sx={{width:'100%',height:'100%',color:'white'}}  fontSize="large"/></span>: <img src={userProfile?.ImageUrl} alt='person' className="w-[150px] z-40 bg-slate-400  h-[150px] rounded-full"/>} 
+          <span><AccountCircleRounded sx={{width:'100%',height:'100%',color:'white'}} /></span>: <img src={userProfile?.ImageUrl} alt='person' className="w-full z-40 bg-slate-400  h-full rounded-full"/>} 
           
           <button type="button"  onClick={handleShowModalBox} className="  cursor-pointer w-full h-full  rounded-full absolute top-0 left-0 right-0 bottom-0 opacity-0 hover:bg-slate-900 hover:opacity-40   ">
          

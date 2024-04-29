@@ -19,6 +19,7 @@ import { Provider } from 'react-redux';
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 import HomePage from './Page/HomePage/HomePage.page';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -64,6 +65,7 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
     <AuthContextProvider >
+      <ToastContainer/>
     <RouterProvider  router={router} ></RouterProvider>
     </AuthContextProvider>
     </Provider>

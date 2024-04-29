@@ -9,7 +9,8 @@ import useOnlineStatus from "../useOnlineStatus";
 export const useUploadImage = (file) => {
   const [progress, setProgress] = useState(0);
   const [ download, setDownloadUrl ] = useState('');
-  const isOnline=useOnlineStatus()
+  const isOnline=useOnlineStatus();
+  const {user}=useUserAuth()
   
  
 
@@ -41,7 +42,7 @@ export const useUploadImage = (file) => {
               
               console.log('File available at', downloadURL);
               const userRef = doc(firestore, 'profile', auth.currentUser.uid);
-              if(isOnline){
+              if(isOnline && user.uid){
               await updateDoc(userRef, { ImageUrl: downloadURL + `?timestamp= ${Date.now()}` });
               }else{
                 console.log('No network, canceling upload.');

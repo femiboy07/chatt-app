@@ -10,6 +10,7 @@ import { auth } from "../../firebase/firebase";
 
 
 
+
 const LoginBar=({sideRef,bar,handleClickOutsideBar,handleShow})=>{
   
   const {userSignOut,setUser}=useUserAuth();

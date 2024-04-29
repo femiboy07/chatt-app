@@ -28,9 +28,9 @@ function App() {
   
 return (
 
-    <div className='bg-[#252329] relative flex h-screen w-full'>
+    <div className='bg-[#252329] relative  flex justify-center mx-auto items-center flex-col h-screen w-full overflow-y-auto'>
       {user === null ? <LoginPage/> :<Layout />}
-      <ToastContainer/> 
+     
     </div>
   );
 }

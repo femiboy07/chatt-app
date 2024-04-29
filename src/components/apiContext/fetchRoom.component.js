@@ -1,4 +1,4 @@
-import { onSnapshot,doc,where,collection,query, getDocs, getDocFromCache } from "firebase/firestore";
+import { onSnapshot,doc,where,collection,query, getDocs, getDocFromCache, getDoc } from "firebase/firestore";
 import {  setProfiles, updateProfile } from "../../reduxstore/features/Channels/channelSlice";
 import { firestore } from "../../firebase/firebase";
 
@@ -8,7 +8,7 @@ import { firestore } from "../../firebase/firebase";
 
 const fetchRoom = async (roomId, dispatch) => {
   const roomRef = doc(firestore, 'Rooms', roomId);
-  const roomDoc = await getDocFromCache(roomRef);
+  const roomDoc = await getDoc(roomRef);
 
   if (!roomDoc.exists()) {
     throw new Error('Room not found');

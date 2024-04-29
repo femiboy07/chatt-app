@@ -8,7 +8,7 @@ import useUserAuth from '../../Context/userContext';
 import { auth } from '../../firebase/firebase';
 
 
-const ChannelItem=({handleChangeChannel,setRooms,room,searchTerm})=>{
+const ChannelItem=({handleChangeChannel,setRooms,room,searchTerm,linkRef})=>{
     
     const {rooms,selectedRoom,loading}=useSelector((state)=>state.rooms);
     const roomId=selectedRoom?.id;
@@ -21,33 +21,23 @@ const ChannelItem=({handleChangeChannel,setRooms,room,searchTerm})=>{
      
 
     useEffect(()=>{
-       
+       if(roomId){
         dispatch(fetchRooms(searchTerm));
-        setIsInitialMount(false)
-      
+        
+       }
       const unsubscribe=fetchRoomsRealTime(dispatch);
 
       return  ()=>{
         unsubscribe()
       }
-     },[dispatch,searchTerm,isInitialMount,user])
+     },[dispatch,searchTerm,user,roomId])
 
 
 
 
 
-  
-    //  if(loading){
-    //   return(
-    //     <div className="flex justify-center flex-col items-center h-full w-full">
-    //     <CircularProgress color='secondary' className='text-white flex justify-center items-center w-full h-full' size={25}/>
-    //     </div> 
-    //   )
-    // }
-   
     
-    
-    if (rooms.length === 0 && !isInitialMount) {
+    if (rooms.length === 0 || !rooms) {
         return(
          <div className='text-white absolute  right-[25.6px] flex flex-col gap-5 left-[32.99px] top-[168.14px]'>
             <div className='flex justify-center'>
@@ -66,15 +56,15 @@ const ChannelItem=({handleChangeChannel,setRooms,room,searchTerm})=>{
       }
     return (
         
-        <div className={`absolute ${loading ?'animate-pulse bg-transparent':''}  max-[370px]:left-3 flex-wrap  right-[25.6px] flex flex-col justify-center items-center gap-5 pb-20  left-[32.99px] top-[168.14px]`}>
+        <div className={`absolute ${loading ?'animate-pulse bg-transparent ':''}  max-[370px]:left-3 flex-wrap  right-[25.6px] flex flex-col justify-center items-center gap-5 pb-20  left-[32.99px] top-[168.14px]`}>
           {rooms.length > 0  && rooms.map((room)=>{
             console.log(room,'room')
             return(
-           <div className={"flex  flex-wrap max-[370px]:w-full max-[370px]:max-w-full w-[265.42px] justify-between  min-h-[42px]"} key={`room-${room.id}-${new Date().getTime()}`}>
-           <div className={`w-[42px] ${loading ? 'animate-pulse bg-transparent':''} flex items-center justify-center  h-[42px] text-[#FFFFFF] bg-[#252329] rounded-lg absolute `}>
+           <div className={`flex ${loading ? 'animate-pulse bg-[black] opacity-5 ':''} flex-wrap max-[370px]:w-full max-[370px]:max-w-full w-[265.42px] justify-between  min-h-[42px]`} key={`room-${room.id}-${new Date().getTime()}`}>
+           <div className={`w-[42px] ${loading ? 'animate-pulse ':''} flex items-center justify-center  h-[42px] text-[#FFFFFF] bg-[#252329] rounded-lg absolute `}>
             <span >{loading ? '' : abbreviation(room.name.toUpperCase())}</span>
           </div>
-          <Link onClick={()=>handleChangeChannel(room)} to={`/channel/${room.id.trim()}`}  className={`h-full ml-12 cursor-pointer text-[#BDBDBD] ${loading ? 'animate-pulse bg-[#252329]': ''}  break-all font-[Poppins] self-center text-[18px] leading-[25px] tracking-[-0.035em]  w-fit`}>{loading ? '' :room.name.toUpperCase()}</Link>
+          <Link  ref={linkRef} onClick={()=>{ handleChangeChannel(room);console.log(room,'click')}}  to={`/channel/${room.id.replace(/\s+/g, '')}`}  className={`h-full ml-12 cursor-pointer text-[#BDBDBD] ${loading ? 'animate-pulse bg-[#252329]': ''}  break-all font-[Poppins] self-center text-[18px] leading-[25px] tracking-[-0.035em]  w-fit`}>{loading ? '' :room.name.toUpperCase()}</Link>
          </div>
             )
          })}

@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, {  useCallback, useEffect, useState } from "react";
 import Channels from "../Channels/Channels.component";
 import { Routes,Route } from "react-router";
 import Channel from "../Channel/Channel.component";
@@ -27,53 +27,27 @@ import useOnlineStatus from "../../Hooks/useOnlineStatus";
 
 
 
-const SideBar=({isOpen,setIsOpen,bar, smIsOpen, smSetIsOpen,setBar,handleClick,searchTerm,setText, barRef,setSearchTerm,searchChannel,sideRef,handleClickOutsideBar,handleShow,handleModal,room,setRooms,handleShowModalProfile})=>{
+const SideBar=({isOpen,setIsOpen,bar, smIsOpen, smSetIsOpen,setBar,handleClick,searchTerm,setText, barRef,setSearchTerm,searchChannel,sideRef,handleClickOutsideBar,handleShow,handleModal,room,setRooms,handleShowModalProfile,scrollRef,handleScrollDown})=>{
    const [changeSide,setChangeSide]=useState(false);
+   const {error,profiles,selectedRoom,rooms,loading}=useSelector((state)=>state.rooms);
    const [userProfile]=useGetCurrentProfile(auth.currentUser);
    const isOnline=useOnlineStatus();
    const dispatch=useDispatch();
    const [width]=useInnerWidthState();
+   const roomId=selectedRoom?.id
    console.log(width)
    console.log(auth.currentUser.uid);
 
 
-   const handleChangeChannel=async(room)=>{
-    console.log('...joining room')
-    
-    const memberIds=room.members;
-    const currentUser=auth.currentUser.uid;
-    console.log(memberIds.includes(currentUser))
-    if(memberIds.includes(currentUser)){
-      setChangeSide(false);
-      dispatch(setSelectedRoom(room));
-      
-      setText('')
-    }else{
-      toast.dark(
-        <>
-          Do you want to join the <strong>{room.name}</strong> room?
-          <div className="mt-3">
-            <button onClick={() => handleJoinRoomConfirm(room)} className="pl-8 pr-8  bg-white rounded-md text-black">Yes</button>
-            <button onClick={() => toast.dismiss()} className="pl-8 pr-8 bg-white ml-2 text-black rounded-md" >No</button>
-          </div>
-        </>,
-        {
-          onClose: (reason) => {
-            if (reason === 'manual') {
-              // Toast was closed by clicking Yes or No button
-              toast.dismiss();
-            }
-          },
-          autoClose: 5000,
-        }
-      );
-    }
 
-    }
 
-    const handleJoinRoomConfirm = async (room) => {
+  
+
+    const handleJoinRoomConfirm = useCallback(async (room) => {
       try{
-      if(isOnline){  
+        handleScrollDown()
+      if(isOnline){ 
+         
       const currentUser = auth.currentUser.uid;
       const roomsRef=doc(firestore,'Rooms',room.id)
             await updateDoc(roomsRef, {
@@ -81,6 +55,7 @@ const SideBar=({isOpen,setIsOpen,bar, smIsOpen, smSetIsOpen,setBar,handleClick,s
       });
       setChangeSide(false);
       dispatch(setSelectedRoom(room));
+       setSearchTerm('')
           toast.dismiss();
       }else{
         toast.dark(
@@ -105,15 +80,53 @@ const SideBar=({isOpen,setIsOpen,bar, smIsOpen, smSetIsOpen,setBar,handleClick,s
         console.log(err)
       }
       
-    };
+    },[dispatch, isOnline, setSearchTerm,handleScrollDown]);
 
+    const handleChangeChannel=useCallback(async(room)=>{
+      console.log('...joining room')
+    
+      const memberIds=room.members;
+      const currentUser=auth.currentUser.uid;
+      console.log(memberIds.includes(currentUser))
+      if(memberIds.includes(currentUser)){
+        setChangeSide(false);
+        dispatch(setSelectedRoom(room));
+         handleScrollDown()
+       
+        // scrollRef.current.scrollTop=scrollRef?.current?.scrollHeight;
+        setSearchTerm('')
+        setText('')
+      }else{
+        // dispatch(selectedRoom('welcome'))
+        toast.dark(
+          <>
+            Do you want to join the <strong>{room.name}</strong> room?
+            <div className="mt-3">
+              <button onClick={() => handleJoinRoomConfirm(room)} className="pl-8 pr-8  bg-white rounded-md text-black">Yes</button>
+              <button onClick={() => toast.dismiss()} className="pl-8 pr-8 bg-white ml-2 text-black rounded-md" >No</button>
+            </div>
+          </>,
+          {
+            onClose: (reason) => {
+              if (reason === 'manual') {
+                // Toast was closed by clicking Yes or No button
+                toast.dismiss();
+              }
+            },
+            autoClose: 5000,
+          }
+        );
+      }
+  
+      },[dispatch, handleJoinRoomConfirm, setSearchTerm, setText,handleScrollDown])
    
+ 
     
 
    
 return (    
           
-          <div className={ `fixed ${isOpen === true ? `fixed animate-wiggle` : `hidden `}   scrollbar-thin overflow-y-auto overflow-x-hidden lg:flex  left-0 top-0  bottom-0 box-border h-full max-[370px]:h-screen  max-[370px]:text-sm   max-[370px]:w-full   shadow-[0,4,4,0,#000000,25%]  max-[370px]:max-w-full      z-[90]  w-[324px]    bg-[#120F13]   `}>
+          <div className={ `fixed ${isOpen === true ? `fixed animate-wiggle` : `hidden `}  shadow-[15px_10px_5px_5px_red] scrollbar-thin sm:overflow-y-hidden  max-w-[570px]:overflow-y-auto  sm:hover:overflow-y-auto overflow-x-hidden lg:flex  left-0 top-0  bottom-0 box-border h-full max-[370px]:h-screen  max-[370px]:text-sm   max-[370px]:w-full   shadow-[0,4,4,0,#000000,25%]  max-[370px]:max-w-full  z-[90]  w-[324px]    bg-[#120F13]   `}>
          
           <Routes>
           <Route path={'/'} element={<Channels/>}/>
@@ -152,7 +165,6 @@ return (
              smSetIsOpen={smSetIsOpen}
              smIsOpen={smIsOpen}
              isOpen={isOpen}
-             
              barRef={barRef}
              room={room} 
              setRooms={setRooms} 

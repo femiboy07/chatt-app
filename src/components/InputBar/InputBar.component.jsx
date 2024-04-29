@@ -46,7 +46,6 @@ const InputBar=({showEmojiPicker,setShowEmojiPicker,text,setText})=>{
      setText(event.target.value);
      buttonWrapper.current.disabled=event.target.value === '';
      
-    
   }
 
 
@@ -66,7 +65,7 @@ const InputBar=({showEmojiPicker,setShowEmojiPicker,text,setText})=>{
             maxRows={10} 
             onChange={handleChange}  
             value={text} 
-            className={'m-0 placeholder-text-left placeholder-items-center  placeholder:font-[Poppins] scrollbar-thin  max-h-[200px] flex justify-center items-center h-full  bg-[#3C393F]  text-white   resize-none pl-6 pr-12 lg:pr-12  lg:pl-9  focus:ring-0 scroll-m-8 scrollbar-track-[black]  scrollbar-thumb-[red]   focus-visible:ring-0 dark:bg-transparent     w-full outline-none '} 
+            className={'m-0 placeholder-text-left placeholder-items-center  placeholder:font-[Poppins] scrollbar-thin  max-h-[150px] flex justify-center items-center h-full  bg-[#3C393F]  text-white   resize-none pl-8 pr-12 lg:pr-12  lg:pl-9  focus:ring-0 scroll-m-8 scrollbar-track-[black]  scrollbar-thumb-[red]   focus-visible:ring-0 dark:bg-transparent     w-full outline-none '} 
             placeholder="Type a message here....."></TextAreaWithRef>
             <button type='button'  onClick={()=>setShowEmojiPicker(!showEmojiPicker)} className="absolute   top-50 bottom-0 flex flex-col justify-center items-center   left-0  -translate-y-1/2 p-1.5 bg-transparent   " >
               <FontAwesomeIcon  icon={faSmile} color="white" width={34} height={34} fill="none"/>

@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from "react";
+import React,{useEffect, useRef, useState} from "react";
 import AddIcon from '@mui/icons-material/Add';
 import SearchBar from "../SearchBar/SearchBar.component";
 import ChannelItem from "../channelitem/ChannelItem.component";
@@ -20,7 +20,7 @@ const Channels=({handleChangeChannel,smIsOpen,isOpen,smSetIsOpen,handleModal,set
     const param=useParams()
     const [width]=useInnerWidthState()
     // const encodeName=decodeURIComponent(param)
-    
+    const linkRef=useRef(null)
   
 
      const handleCloseSideBar=()=>{
@@ -37,8 +37,8 @@ const Channels=({handleChangeChannel,smIsOpen,isOpen,smSetIsOpen,handleModal,set
          <FontAwesomeIcon icon={faClose} color='white'  fontSize={25}/>
          </button>:null}
         </div>
-        <SearchBar searchChannel={searchChannel} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/> 
-        <ChannelItem  setRooms={setRooms} searchTerm={searchTerm} room={room} handleChangeChannel={handleChangeChannel}/>
+        <SearchBar linkRef={linkRef} searchChannel={searchChannel} searchTerm={searchTerm} setSearchTerm={setSearchTerm}/> 
+        <ChannelItem  linkRef={linkRef} setRooms={setRooms} setSearchTerm={setSearchTerm} searchTerm={searchTerm} room={room} handleChangeChannel={handleChangeChannel}/>
         </>
     
     )

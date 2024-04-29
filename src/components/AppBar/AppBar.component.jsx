@@ -4,11 +4,13 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import useInnerWidthState from "../../Hooks/useInnerWidthState/useInnerWidthState";
 import { useSelector } from "react-redux";
+import { useMatch } from "react-router";
 
 
 const AppBar=({isOpen,setIsOpen,barRef,handleClickOutside})=>{
     const {selectedRoom}=useSelector(state=>state.rooms)
     const [width]=useInnerWidthState();
+    const match=useMatch('allChannel/homePage')
 
    
    
@@ -24,7 +26,7 @@ const AppBar=({isOpen,setIsOpen,barRef,handleClickOutside})=>{
         )}  
         {isOpen && <div onClick={handleClickOutside} className="h-screen w-screen fixed left-0 right-0 bg-red z-50"></div>} 
     <div className={`flex  ml-5 items-center ${width  > 228 ? 'block':'hidden'}`}>
-    <button className={` font-medium   lg:ml-[372px]    uppercase text-[#E0E0E0]  `} >{selectedRoom.name}</button>
+    <button className={` font-medium   lg:ml-[372px] font-Poppins    uppercase text-[#E0E0E0]  `} >{!match ? selectedRoom.name:'THE ROOM'}</button>
     </div>
     </header>
 

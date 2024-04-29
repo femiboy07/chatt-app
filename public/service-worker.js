@@ -1,14 +1,10 @@
-
-
-
-
 const CACHE_NAME = 'firebase-cache-v1';
 const STORAGE_URL = 'https://firebasestorage.googleapis.com';
 
 
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('install', (event)=>{
-     event.waitUntill(
+     event.waitUntil(
           caches.open(CACHE_NAME).then((cache)=>cache.addAll([
             '/',
             'index.html', // Add other important URLs
@@ -20,6 +16,11 @@ self.addEventListener('install', (event)=>{
 
 // eslint-disable-next-line no-restricted-globals
 self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (request.method === 'POST') {
+    // Skip caching for POST requests
+    return;
+}
      event.respondWith(
        caches.match(event.request)
          .then((response) => {

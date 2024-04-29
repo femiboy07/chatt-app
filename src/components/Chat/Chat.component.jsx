@@ -10,27 +10,31 @@ import fetchRoom from "../apiContext/fetchRoom.component";
 import useOnlineStatus from "../../Hooks/useOnlineStatus";
 import { fetchRoomsRealTime } from "../apiContext/fetchRooms";
 import useScrollDate from "../../Hooks/useUploadImage/useScrollDate";
-import { debounce } from "lodash";
+import { debounce, head } from "lodash";
 
 
-const Chat=({searchTerm})=>{
+const Chat=({searchTerm,handleScrollDown,isScroll,isEnd,scrollRef})=>{
   const dispatch=useDispatch();
   const [messages, setMessages] = useState([]);
   const {profiles,loading,selectedRoom}=useSelector((state)=>state.rooms)
   const unsubscribeRef=useRef(null);
-   const roomId=selectedRoom?.id;
-
+  const roomId=selectedRoom?.id;
   const [prevMessageDate,setPrevMessageDate]=useState(null);
   const [isHeaderTransparent, setIsHeaderTransparent] = useState(false);
+  const spanRef=useRef(null);
+  const headerRefs = useRef([]);
 
-
-  
+    
   
   const getMessageHeading = (timestamp) => {
     const messageDate = new Date(timestamp);
     const today = new Date();
    
-  
+    if (isNaN(messageDate)) {
+      // Invalid date, handle the error as needed
+      return 'Invalid Date';
+    }
+
     if (isSameDay(messageDate, today)) {
       // If the message is from today, return a formatted date
       return messageDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -41,7 +45,7 @@ const Chat=({searchTerm})=>{
       return  messageDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }); ;
     } else {
       // For other dates, return a custom heading
-      return messageDate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'long' });
+      return messageDate.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' });
     }
   
 
@@ -87,6 +91,7 @@ const Chat=({searchTerm})=>{
   };
   
     const fetchData =  useCallback(async() => {
+  
       
       const {unsubscribe,membersListener} = await fetchRoom(roomId,dispatch);
 
@@ -107,7 +112,7 @@ const Chat=({searchTerm})=>{
     
       if(roomId){
        
-        dispatch(fetchRooms());
+        // dispatch(fetchRooms(searchTerm));
         fetchData()
         setMessages([])
       }
@@ -171,61 +176,41 @@ const Chat=({searchTerm})=>{
 
   
 
+
   const meet = groupMessagesByDate(messages);
 
-  const headerRefs = useRef([]);
-
+ 
+  
 
 
   // Function to handle scrolling and update sticky headers
   
-  useEffect(() => {
-    const handleScroll = debounce(() => {
-      const headerPositions = headerRefs?.current.map((ref) => ref.getBoundingClientRect().top);
-
-      const currentScrollPosition = window.scrollY;
-      console.log(currentScrollPosition)
-
-      let isTransparent = true;
-
-      for (let i = 0; i < headerPositions.length - 1; i++) {
-        if (currentScrollPosition >= headerPositions[i] && currentScrollPosition < headerPositions[i + 1]) {
-          isTransparent = false;
-          break;
-        }
-      }
-
-      setIsHeaderTransparent(isTransparent);
-    },200);
-
-    // Attach scroll event listener
-    window.addEventListener('scroll', handleScroll);
-
-    // Detach event listener on component unmount
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  
   console.log(meet,"meet")
   
-console.log(isHeaderTransparent)
+console.log(isHeaderTransparent);
+
+ 
 
     return(
         <>
       {Object.entries(meet).length > 0 && (
         <div  className="flex flex-col justify-center items-center lg:pr-[55px] w-full mt-[55px] mb-[78px]">
           {Object.entries(meet).map(([heading, messages], index) => {
-            
-            const headerRef = React.createRef();
-            headerRefs.current[index] = headerRef;
-            
-            return (
-              <span key={index}  className=" h-auto  sticky  w-full" >
-                <div ref={headerRef}  className={`text-[#828282] sticky w-full  flex 
-                  border-[#828282] ${isHeaderTransparent ? 'bg-transparent sticky opacity-0':' sticky'}    justify-center top-10 pt-9    mb-2  font-[Noto-Sans]`}>
-                  
-                  <span  className={'flex  justify-center items-center  rounded-md h-full pl-5 text-[14px] bg-[#120F13] pr-5'}>{heading}</span>
-                 
+
+           
+           const headerRef = React.createRef();
+           headerRefs.current[index] = headerRef;
+           console.log("Length",headerRef.length)
+           console.log(headerRef,"headerRef")
+           console.log(spanRef?.current?.offsetHeight,"spanHeight")
+
+           
+         
+         return (
+              <div key={index} ref={spanRef}    className={" h-full  mb-1  w-full"} >
+                <div   ref={headerRef} key={index} className={'text-[#828282]  flex border-[#828282]   justify-center top-10 pt-9    mb-2  font-[Noto-Sans]'}>
+                  <span  className={'flex  justify-center items-center   rounded-md h-full pl-5 text-[12px] bg-[#120F13] pr-5'}>{heading}</span>
                 </div>
                 {messages.map((message, index) => {
                   const user = profiles.find((profile) => profile.id === message.userId);
@@ -238,7 +223,7 @@ console.log(isHeaderTransparent)
                     />
                   );
                 })}
-              </span>
+              </div>
             );
           })}
         </div>
