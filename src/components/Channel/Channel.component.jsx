@@ -14,6 +14,7 @@ import useUserAuth from "../../Context/userContext";
 const Channel=({bar,sideRef,handleClickOutsideBar,handleClick,handleShowModalProfile})=>{
     const {error,profiles,selectedRoom,rooms,loading}=useSelector((state)=>state.rooms);
    const roomId=selectedRoom?.id;
+   const store=localStorage.getItem("selectedRoom")
     const dispatch=useDispatch();
     const {user}=useUserAuth()
     const isOnline=useOnlineStatus();
@@ -26,9 +27,11 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick,handleShowModalPro
 
  useEffect(() => {
       dispatch(clearProfile())
+
+      
     
       const fetchData = async () => {
-        if(roomId || user.uid ){
+        if(roomId || user.uid || !selectedRoom ){
         const {unsubscribe,membersListener} = await fetchRoom(roomId,dispatch);
        
         // Cleanup function
@@ -44,19 +47,19 @@ const Channel=({bar,sideRef,handleClickOutsideBar,handleClick,handleShowModalPro
         fetchData();
       }
   
-    }, [dispatch, roomId,isOnline,user.uid]);
+    }, [dispatch, roomId, isOnline, user.uid, selectedRoom]);
 
    
     console.log(profiles)
 
-    // if(loading){
-    //     return (
-    //      <div className="flex justify-center flex-col  items-center h-screen w-full">
-    //      <CircularProgress color="inherit" size={50} />
-    //      </div> 
+    if(profiles.length === 0){
+        return (
+         <div className="flex justify-center flex-col  items-center h-screen w-full">
+         <CircularProgress color="primary" size={50} />
+         </div> 
         
-    //     )
-    // }
+        )
+    }
 
     if(error){
       console.log(error,'error')

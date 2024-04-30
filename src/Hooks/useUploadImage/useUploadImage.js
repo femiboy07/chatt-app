@@ -80,7 +80,7 @@ export const useUploadImage = (file) => {
       }
     };
 
-  }, [file,isOnline]);
+  }, [file, isOnline, user.uid]);
  
 
 

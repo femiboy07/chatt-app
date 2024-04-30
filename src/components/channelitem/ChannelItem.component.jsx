@@ -21,7 +21,7 @@ const ChannelItem=({handleChangeChannel,setRooms,room,searchTerm,linkRef})=>{
      
 
     useEffect(()=>{
-       if(roomId){
+       if(roomId || user.uid){
         dispatch(fetchRooms(searchTerm));
         
        }

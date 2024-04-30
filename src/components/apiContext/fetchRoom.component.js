@@ -53,6 +53,7 @@ const fetchRoom = async (roomId, dispatch) => {
       profileQuery,
       { includeMetadataChanges: true },
       (snapshot) => {
+        // eslint-disable-next-line array-callback-return
         snapshot.docChanges().flatMap((change) => {
           const profileData = change.doc.data();
           const entries = Object.entries(profileData);

@@ -1,10 +1,10 @@
-import workBoxConfig from "./workBox-config";
-import workbox from 'workbox-window'
+// import workBoxConfig from "./workBox-config";
+// import workbox from 'workbox-window'
 
 
 
-const CACHE_NAME = 'v0/b/chatt-app-1c551.appspot.com/o';
-const STORAGE_URL = 'https://firebasestorage.googleapis.com';
+// const CACHE_NAME = 'v0/b/chatt-app-1c551.appspot.com/o';
+// const STORAGE_URL = 'https://firebasestorage.googleapis.com';
 
 // if (workBoxConfig) {
 //   console.log('Workbox is loaded');

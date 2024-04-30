@@ -42,7 +42,7 @@ const savedSelectedRoom = localStorage.getItem('selectedRoom') ;
 
 const Channels=createSlice({
   name:'Channels',
-  initialState:{rooms:[],profiles:[],profileImage:'',error:null,loading:false,selectedRoom:savedSelectedRoom !== null ? JSON.parse(savedSelectedRoom):{id:'welcome'}},
+  initialState:{rooms:[],profiles:[],profileImage:'',error:null,loading:false,selectedRoom:savedSelectedRoom !== null ? JSON.parse(savedSelectedRoom):{id:'welcome',description:"Welcome to my chatroom !!! huray you wer able to make it",name:"Welcome Channel"}},
   reducers:{
     setSelectedRoom:(state,action)=>{
       state.selectedRoom=action.payload;

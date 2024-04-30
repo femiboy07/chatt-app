@@ -1,3 +1,4 @@
+
 const CACHE_NAME = 'firebase-cache-v1';
 const STORAGE_URL = 'https://firebasestorage.googleapis.com';
 
@@ -7,7 +8,7 @@ self.addEventListener('install', (event)=>{
      event.waitUntil(
           caches.open(CACHE_NAME).then((cache)=>cache.addAll([
             '/',
-            'index.html', // Add other important URLs
+            '/index.html', // Add other important URLs
             '/service-worker.js', // Ensure the service worker itself is cached
           ]))
      ) 

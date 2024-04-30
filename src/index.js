@@ -56,17 +56,16 @@ const router=createBrowserRouter([
     path:'register',
     element:<RegisterPage/>
   },
-  
-
- 
 ])
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <Provider store={store}>
     <AuthContextProvider >
       <ToastContainer/>
-    <RouterProvider  router={router} ></RouterProvider>
+    <RouterProvider  router={router}></RouterProvider>
     </AuthContextProvider>
     </Provider>
   </React.StrictMode>

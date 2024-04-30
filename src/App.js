@@ -23,7 +23,7 @@ function App() {
           console.error('Service Worker registration failed:', error);
         });
     }
-  },[user])
+  },[])
  
   
 return (

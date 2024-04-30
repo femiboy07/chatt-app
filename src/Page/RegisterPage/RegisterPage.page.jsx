@@ -1,4 +1,4 @@
-import React ,{useEffect, useState} from 'react';
+import React ,{useEffect, useState,useCallback} from 'react';
 import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import useUserAuth from '../../Context/userContext';
@@ -24,7 +24,9 @@ const RegisterPage=()=>{
     const [visibility,setVisibility]=useState(false);
     const [autofocus,setAutoFocus]=useState(true);
     const isOnline=useOnlineStatus()
-    const {formState:{errors},register,handleSubmit,setError,clearErrors,reset}=useForm()
+    const {formState:{errors},register,handleSubmit,setError,clearErrors,reset}=useForm({
+      mode:'onChange'
+    })
     const navigate=useNavigate();
     const {signUp,loading,setLoading,addUserToWelcomeChannel,signIn}=useUserAuth();
     
@@ -51,19 +53,28 @@ const RegisterPage=()=>{
      
 
  const handleSignUp=async(data)=>{
-
-  // setValues({email:'',password:'',FirstName:'',LastName:''})
+ 
+ 
+    
+ 
+ if(isOnline){
+  reset({
+    email:'',
+    password:'',
+    FirstName:'',
+    LastName:''
+  })
+  clearErrors(['err','custom'])
   setLoading(true)
    try{
-
-    
-     await signUp(data.email,data.password);
-     
+    await signUp(data.email,data.password);
+     clearErrors(['err'])
      const userCredential=await signIn(data.email,data.password);   
         const user=userCredential.user;
         if(!user){
         throw new Error("User is not authenticated");
         }
+       
         console.log('mechange',user)
         await setDoc(doc(firestore,'users',user.uid),{
                 FirstName: data.FirstName,
@@ -72,19 +83,18 @@ const RegisterPage=()=>{
                 password:data.password,
                 userId:user.uid
         })
-        await addUserToWelcomeChannel(user.uid,data)
+        
        
         // setValues(initialFormValues);
-        setLoading(false);
+       
         // setError(false);
-        // dispatch(setSelectedRoom("welcome"))
-        navigate('/channel/welcome');
-
+        await addUserToWelcomeChannel(user.uid,data);
+         setLoading(false);
+         dispatch(setSelectedRoom({id:'welcome',description:"Welcome to my chatroom !!! huray you wer able to make it",name:"Welcome Channel"}))
+         navigate('/channel/welcome');
+        
        
 
-        // eslint-disable-next-line no-restricted-globals
-        // location.reload()
-      
        }catch(err){
          console.log(err);
          setLoading(false)
@@ -93,15 +103,23 @@ const RegisterPage=()=>{
          if(err.code === 'auth/email-already-in-use'){
            setError("classic",{type:"custom",message:"Email already in use, correct the email pls thank you"})
          }
-
-         if(!isOnline){
-            setError('error',{type:'err',message:"Can't sign in something went wrong pls check it "})
-         }
+       
     }finally{
       setLoading(false);
      
       // dispatch(setSelectedRoom())
     }
+  }
+  if(!isOnline){
+    reset({
+     email:'',
+     password:'',
+     FirstName:'',
+     LastName:''
+   })
+   setError('error',{type:'err',message:"Can't sign in something went wrong pls check it "});
+ }
+
 }
 
 const handleBlur = (event, fieldName) => {
@@ -121,8 +139,12 @@ useEffect(()=>{
     FirstName:'',
     LastName:''
   })
+
+  
+ 
   clearErrors(['FirstName','LastName','email','password','custom','err'])
-},[clearErrors,reset])
+},[clearErrors,reset,isOnline
+])
 
 
     return(
@@ -225,7 +247,7 @@ useEffect(()=>{
               <div className='relative p-5'>
               
                 <input
-                {...register("LastName",{required:true})}
+                {...register("LastName",{required:true,onBlur:(e)=>handleBlur(e,LastName)})}
                   id="LastName"
                   name="LastName"
                   type="text"
@@ -234,7 +256,7 @@ useEffect(()=>{
                   className={'absolute block w-full  peer placeholder:text-transparent    bg-transparent  inset-0 shadow-[0px_0px_5px_0_#120F13]    appearance-none border-transparent  border-b border-b-gray-600  py-2 text-white font-extrabold placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'}
                   placeholder="LastName"
                 />
-                  <label htmlFor="LastName" className={`text-white  ${values.LastName.length  > 0 ? 'peer-focus:-top-7  peer-enabled:text-[12px]  ':'top-0 text-[15px]'}  peer-focus:text-[12px] peer-focus:transition-[top]   peer-focus:ease-in-out peer-focus:delay-400 peer-focus:-top-7 text-[15px] absolute left-0 translate-y-1/2`}>
+                  <label htmlFor="LastName" className={`text-white ${values.LastName.length  > 0 ? 'peer-enabled:-top-7   peer-enabled:text-[12px]  ':'top-0  text-[15px]'}   peer-focus:text-[12px]  peer-focus:transition-[top]   peer-focus:ease-in-out peer-focus:delay-400 peer-focus:-top-7 text-[15px] absolute left-0 translate-y-1/2`}>
                  <span>LastName</span>
                 </label>
               </div>

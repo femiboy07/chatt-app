@@ -1,9 +1,11 @@
 import React,{useEffect, useState} from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 // import { debounce } from "lodash";
 
 const useOnlineStatus = () => {
   const [isOnline, setOnline] = useState(navigator.onLine);
+  const {setError,clearErrors}=useForm()
 
   useEffect(() => {
     const handleOnline = () => {
@@ -13,6 +15,8 @@ const useOnlineStatus = () => {
       //   });
       // }
       setOnline(true);
+      setError(null);
+      clearErrors(['custom','err'])
     };
 
     const handleOffline = () => {
@@ -38,7 +42,7 @@ const useOnlineStatus = () => {
       window.removeEventListener('offline', handleOffline);
      
     };
-  }, [isOnline]);
+  }, [isOnline, setError]);
 
   return isOnline;
 };
