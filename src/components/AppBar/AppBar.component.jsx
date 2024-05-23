@@ -15,7 +15,7 @@ const AppBar=({isOpen,setIsOpen,barRef,handleClickOutside})=>{
    
    
        return(
-    <header className="bg-[#252329] h-[59.49px] z-50 fixed left-0 top-0    lg:w-full     w-full flex items-center   shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
+    <header className="bg-[#252329] h-[75px] z-50 fixed left-0 top-0    lg:w-full     w-full flex items-center   shadow-[0_4px_4px_rgba(0,0,0,0.25)]">
         {isOpen === false ? (
             <button onClick={setIsOpen}  className='lg:hidden md:block ml-4 lg:ml-5 flex items-center bg-inherit w-fit h-full     justify-center '>
                 <FontAwesomeIcon icon={faBars} color='#F2F2F2'  className='w-[18px] h-6 '/>

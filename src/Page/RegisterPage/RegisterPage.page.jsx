@@ -25,7 +25,7 @@ const RegisterPage=()=>{
     const [autofocus,setAutoFocus]=useState(true);
     const isOnline=useOnlineStatus()
     const {formState:{errors},register,handleSubmit,setError,clearErrors,reset}=useForm({
-      mode:'onChange'
+    
     })
     const navigate=useNavigate();
     const {signUp,loading,setLoading,addUserToWelcomeChannel,signIn}=useUserAuth();
@@ -54,10 +54,7 @@ const RegisterPage=()=>{
 
  const handleSignUp=async(data)=>{
  
- 
-    
- 
- if(isOnline){
+  if(isOnline){
   reset({
     email:'',
     password:'',
